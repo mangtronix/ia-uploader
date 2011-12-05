@@ -8,6 +8,7 @@ from PyQt4.QtWebKit import *
 app = QApplication(sys.argv)
 
 web = QWebView()
+web.resize(1024, 768)
 web.load(QUrl("http://www-mang.archive.org/upload/app/"))
 web.show()
 web.raise_()
