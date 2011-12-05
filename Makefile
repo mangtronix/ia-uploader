@@ -18,13 +18,15 @@
 # Customizable variables
 ################################################################################
 
-NAME ?= MyApp
+NAME ?= InternetArchiveUploader
 VERSION ?= 0.1
 
-SOURCE_DIR ?= src
-SOURCE_FILES ?= MyApp.app README COPYING
+SOURCE_DIR ?= dist
+SOURCE_FILES ?= iauploader.app
+#SOURCE_FILES ?= iauploader.app README COPYING
 
 TEMPLATE_DMG ?= template.dmg
+TEMPLATE_SIZE ?= 80m
 
 
 ################################################################################
@@ -45,7 +47,7 @@ $(TEMPLATE_DMG).bz2:
 	@echo
 	@echo --------------------- Generating empty template --------------------
 	mkdir template
-	hdiutil create -fs HFSX -layout SPUD -size 40m "$(TEMPLATE_DMG)" -srcfolder template -format UDRW -volname "$(NAME)" -quiet
+	hdiutil create -fs HFSX -layout SPUD -size $(TEMPLATE_SIZE) "$(TEMPLATE_DMG)" -srcfolder template -format UDRW -volname "$(NAME)" -quiet
 	rmdir template
 	bzip2 "$(TEMPLATE_DMG)"
 	@echo
