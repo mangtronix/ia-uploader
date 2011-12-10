@@ -11,6 +11,9 @@ from bottle import *
 
 def allowedOrigin():
 	return '*'
+	
+def allowedMethods():
+	return 'GET,PUT'
 
 def allowedHeaders():
 	return 'authorization,cache-control,x-amz-acl,x-amz-auto-make-bucket,x-file-name,x-file-size,x-requested-with'
@@ -28,7 +31,7 @@ def upload_options(filename=None):
 	print("OPTIONS request for %s" % filename)
 		
 	response.set_header('Access-Control-Allow-Origin', allowedOrigin())
-	response.set_header('Access-Control-Allow-Methods', 'PUT')
+	response.set_header('Access-Control-Allow-Methods', allowedMethods())
 	response.set_header('Access-Control-Allow-Headers', allowedHeaders())
 	
 	return ""
@@ -38,7 +41,7 @@ def upload_put(filename=None):
 	print("PUT request for %s" % filename)
 	
 	response.set_header('Access-Control-Allow-Origin', allowedOrigin())
-	response.set_header('Access-Control-Allow-Methods', 'PUT')
+	response.set_header('Access-Control-Allow-Methods', allowedMethods())
 	response.set_header('Access-Control-Allow-Headers', allowedHeaders())
 
 	out_filename = os.path.join('upload', filename)
