@@ -33,6 +33,7 @@ def upload_options(filename=None):
 	response.set_header('Access-Control-Allow-Origin', allowedOrigin())
 	response.set_header('Access-Control-Allow-Methods', allowedMethods())
 	response.set_header('Access-Control-Allow-Headers', allowedHeaders())
+	response.set_header('Access-Control-Max-Age', 60*24*7) # One week - only applies if putting same file so not very useful
 	
 	return ""
 	
