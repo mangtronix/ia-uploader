@@ -6,6 +6,8 @@ Michael Ang <http://github.com/mangtronix>
 License: AGPL 3.0
 """
 
+import string
+
 import bottle
 from bottle import *
 
@@ -16,11 +18,32 @@ def allowedMethods():
 	return 'GET,PUT'
 
 def allowedHeaders():
-	return 'authorization,cache-control,x-amz-acl,x-amz-auto-make-bucket,x-file-name,x-file-size,x-requested-with'
+
+	# $$$ should mediatype be disallowed and automatically guessed?
+	meta_headers = ['title', 'description', 'language', 'mediatype']
+	meta_list_headers = ['collection']
+	
+	headers = [
+		'authorization', 'x-amz-acl', 'x-amz-auto-make-bucket',
+		'cache-control', 'x-requested-with',
+		'x-file-name', 'x-file-size', 'x-archive-ignore-preexisting-bucket',		
+	]
+	
+	meta_headers = ['x-archive-meta-%s' % header for header in meta_headers]
+	headers.extend(meta_headers)
+	
+	max_list_members = 2
+	list_headers = []
+	for header in meta_list_headers:
+		for i in range(max_list_members):
+			list_headers.append('x-archive-meta%02d-%s' % (i + 1,header))
+	headers.extend(list_headers)
+	
+	return string.join(headers, ',')
 
 @route('/')
 def index():
-    return '<p>PUT to /upload/filename</p>'
+    return '<p><a href="/static/put.html">PUT</a> to /upload/filename</p><p>Allowed headers are %s<p>' % allowedHeaders()
     
 @route('/static/<filepath:path>')
 def server_static(filepath):
