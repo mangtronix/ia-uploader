@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>PUT Upload Test</title>
+<script src="jquery-1.4.2.min.js"></script>
+<script src="jquery.html5_upload.js"></script>
+<script>
+</script>
+</head><body>
+        Access key: <input type="access_key" id="access_key" value="access_key" /><br/>
+        Secret key: <input type="secret_key" id="secret_key" value="secret_key" /><br/>
+        Item identifier: <input type="identifier" id="item_id" value="mang_put_test"/><br/>
+		File: <input type="file" multiple="true" id="upload_field" /><br/>
+		<input type="button" value="go" onclick="$('#upload_field').triggerHandler('html5_upload.start');"/>
+		<div id="progress_report">
+			<div id="progress_report_name"></div>
+			<div id="progress_report_status" style="font-style: italic;"></div>
+			<div id="progress_report_bar_container" style="width: 90%; height: 5px;">
+				<div id="progress_report_bar" style="background-color: blue; width: 0; height: 100%;"></div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var host = "localhost:8080";
+			$('<p>Will PUT to host ' + host + '</p>').appendTo($('body'));
+			
+			$("#upload_field").html5_upload({
+				autostart:false,
+				method:'PUT',
+				STATUSES:{
+				'STARTED':'Started',
+				'PROGRESS':'Progress',
+				'LOADED':'Loaded',
+				'FINISHED':'Finished'
+				},
+				genName: function(file, number, total) {
+					return file + "(" + (number+1) + " of " + total + ")";
+				},
+				url: function(number) {
+					//return 'http://s3.us.archive.org/' + $('#item_id')[0].value + '/' + $('#upload_field')[0].files[number].name;
+					//return 'http://s3.us.archive.org/' + $('#item_id')[0].value + '/' + $('#upload_field')[0].files[number].name;
+					return 'http://' + host + '/upload/' + $('#upload_field')[0].files[number].name;
+				},
+				sizeHint: function(number) {
+				    return $('#upload_field')[0].files[number].size;
+				},
+				sendBoundary: false,
+				setName: function(text) {
+						$("#progress_report_name").text(text);
+				},
+				setStatus: function(text) {
+					$("#progress_report_status").text(text);
+				},
+				setProgress: function(val) {
+					$("#progress_report_bar").css('width', Math.ceil(val*100)+"%");
+				},
+				onFinishOne: function(event, response, name, number, total) {
+				}
+			});
+		</script>
+		
+		Adapted from ATTIK HTML 5 Sandbox.
+</body></html>
